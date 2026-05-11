@@ -1,0 +1,9 @@
+---
+- name: Create unic hostnames for Kubernetes
+  hosts: k8s_cluster
+  become: yes
+
+  tasks:
+    - name: Create unic names by using last ip numbers
+      hostname:
+        name: "k8s-node-{{ inventory_hostname.split('.')[-1] }}"
