@@ -1,0 +1,29 @@
+---
+
+- name: First step - Take receive command from Master
+  hosts: master
+  become: yes
+  tasks:
+    - name: create a join token on Master
+      command: kubeadm token create --print-join-command
+      register: join_command_raw
+
+    - name: Save created token in temp Ansible memory
+      add_host:
+        name: "K8S_TOKEN_HOLDER"
+        join_command: "{{ join_command_raw.stdout }}"
+
+- name: Take all workers to the Army
+  hosts: workers
+  become: yes
+
+  tasks:
+    - name: Check if already joined
+      stat:
+        path: /etc/kubernetes/kubelet.conf
+      register: kubelet_conf
+    
+    - name: Join the army using the master's token
+      command: "{{ hostvars['K8S_TOKEN_HOLDER']['join_command'] }}"
+      when: not kubelet_conf.stat.exists
+      

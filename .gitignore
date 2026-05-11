@@ -1,0 +1,26 @@
+# --- ANAHTARLAR VE ŞİFRELER (ASLA GİT'E GİRMEMELİ!) ---
+*.pem
+*.key
+.env
+ansible/vault/secrets.yml
+ansible/group_vars/all/vault.yml
+
+# --- ANSIBLE GEÇİCİ DOSYALARI ---
+*.retry
+
+# --- TERRAFORM (İleride kullanacağımız altyapı state dosyaları) ---
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+terraform.tfvars
+override.tf
+override.tf.json
+.terraform.lock.hcl
+
+# --- KUBERNETES ---
+kubeconfig
+admin.conf
+
+# --- İŞLETİM SİSTEMİ ---
+.DS_Store

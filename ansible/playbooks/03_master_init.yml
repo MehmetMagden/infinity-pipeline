@@ -1,0 +1,35 @@
+---
+- name: Wake up Master Node's brain ( Control Plane Init )
+  hosts: master
+  become: yes
+
+  tasks:
+    - name: Is Kubernetes installed
+      stat: 
+        path: /etc/kubernetes/admin.conf
+      register: kubeadm_conf
+
+    - name: with Kubeadm run Cluster ( Activate the Brain)
+      command: kubeadm init --apiserver-advertise-address=192.168.56.14 --pod-network-cidr=10.244.0.0/16
+      when: not kubeadm_conf.stat.exists
+
+    - name: Create a folder for vagrant user ( .kube )
+      file:
+        path: /home/vagrant/.kube
+        state: directory
+        mode: '0755'
+        owner: vagrant
+        group: vagrant
+
+    - name: K8s adming rights ( admin.conf ) to vagrant user
+      copy: 
+        src: /etc/kubernetes/admin.conf
+        dest: /home/vagrant/.kube/config
+        remote_src: yes
+        owner: vagrant
+        group: vagrant
+        mode: '0644'
+
+    - name: Create Pd Net ( Flannel CNI)
+      become_user: vagrant
+      command: kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml

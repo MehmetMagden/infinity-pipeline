@@ -1,0 +1,26 @@
+---
+- name: Open the locks of Containerd Motor ( CRI and Systemd )
+  hosts: k8s_cluster
+  become: yes
+
+  tasks:
+
+    - name: Create settings directory
+      file:
+        path: /etc/containerd
+        state: directory
+        mode: '0755'
+
+    - name: Defaults for Containerd
+      shell: containerd config default > /etc/containerd/config.toml
+
+    - name : Make SystemdCgroup settings true ( for K8s' hearth )
+      replace:
+        path: /etc/containerd/config.toml
+        regexp: 'SystemdCgroup = false'
+        replace: 'SystemdCgroup = true'
+
+    - name: Set Containerd and restart
+      service:
+        name: containerd
+        state: restarted

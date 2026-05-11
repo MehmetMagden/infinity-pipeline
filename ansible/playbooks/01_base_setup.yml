@@ -1,0 +1,31 @@
+---
+
+- name: Base setup 
+  hosts: k8s_cluster
+  become: yes
+
+  tasks:
+    
+    - name: Cache update and required Programs
+      apt:
+        name: 
+          - curl
+          - apt-transport-https
+          - ca-certificates
+          - software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start and enable Docker
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Linux Swap alanını kapat
+      command: swapoff -a

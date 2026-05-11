@@ -1,0 +1,26 @@
+---
+- name: Open Kubernetes network logs
+  hosts: k8s_cluster
+  become: yes
+
+  tasks:
+
+    - name: Activate Kernel Moduls ( Overlay and br_netfilter )
+      shell: |
+        modprobe overlay
+        modprobe br_netfilter
+        cat <<EOF | sudo tee /etc/modules-load.d/k8s.conf
+        overlay
+        br_netfilter
+        EOF
+
+    - name: For K8s IP fowarding and Rules
+      sysctl:
+        name: "{{ item }}"
+        value: '1'
+        state: present
+        reload: yes
+      loop:
+        - net.bridge.bridge-nf-call-iptables
+        - net.bridge.bridge-nf-call-ip6tables
+        - net.ipv4.ip_forward

@@ -1,0 +1,51 @@
+---
+
+- name: Secret Kubernetes tree (Kubeadm Kubelet Kubeclt)
+  hosts: k8s_cluster
+  become: yes
+
+  tasks:
+    - name: Install required apps
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gpg
+        state: present
+
+    - name: Create a directory for GPG key
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download formal Kubernetes key
+      shell: curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.29/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+      args:
+        creates: /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+
+    - name: Add Kubernetes APT to system
+      apt_repository:
+        repo:    "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.29/deb/ /" 
+        state: present
+        filename: kubernetes
+
+    - name: Install Kubelet, Kubeadm and Kubectl
+      apt:
+        name: 
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+        update_cache: yes
+
+    - name: Do not update Kubernetes, solid version
+      dpkg_selections:
+        name: "{{ item }}"
+        selection: hold
+      loop: 
+        - kubelet
+        - kubeadm
+        - kubectl
+      
