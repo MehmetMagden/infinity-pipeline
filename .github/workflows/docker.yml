@@ -1,0 +1,56 @@
+name: Infinity Pipeline - SwissTask CI/CD
+
+# will work only when something is pushed to main
+on:
+    push:
+        branches: [ main ]
+
+jobs:
+    # QA Test
+    test-stage: 
+        runs-on: ubuntu-latest
+        env:
+            DATABASE_URL: 'sqlite:///:memory:'
+        steps:
+            - name: receive all code (Checkout)
+              uses: actions/checkout@v4
+            
+            - name: Install Python  
+              uses: actions/setup-python@v5
+              with:
+                python-version: '3.11'
+                
+            - name: Install requirements
+              run: |
+                pip install -r swisstask/app/requirements.txt
+
+            - name: Run the Strongest Tests (Pytest)
+              run: |
+                cd swisstask
+                pytest tests/ -v
+
+    # Docker Creation          
+    docker-stage:
+        needs: test-stage
+        runs-on: ubuntu-latest
+        steps:
+            - name: receive all codes
+              uses: actions/checkout@v4
+
+            - name: Entering Docker Hub
+              uses: docker/login-action@v3
+              with:
+                username: ${{ secrets.DOCKER_USERNAME }}
+                password: ${{ secrets.DOCKER_PASSWORD }}
+            
+            - name: Build and Push
+              uses: docker/build-push-action@v5
+              with:
+                context: ./swisstask/app
+                push: true
+                tags: |
+                  wowmaker/swisstask:latest
+                  wowmaker/swisstask:${{ github.sha }}
+
+
+
