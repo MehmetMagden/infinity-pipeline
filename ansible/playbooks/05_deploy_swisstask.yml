@@ -16,6 +16,8 @@
         owner: vagrant
         group: vagrant
       loop:
+      - ../../swisstask/k8s/swisstask-secret.yaml
+      - ../../swisstask/k8s/swisstask-db.yaml
       - ../../swisstask/k8s/swisstask-deployment.yaml
       - ../../swisstask/k8s/swisstask-service.yaml
 

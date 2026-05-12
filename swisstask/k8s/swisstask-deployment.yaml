@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swisstask-api
+  labels:
+    app: swisstask
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: swisstask
+  template:
+    metadata:
+      labels:
+        app: swisstask
+    spec:
+      containers:
+      - name: swisstask
+        image: wowmaker/swisstask:latest
+        ports:
+        - containerPort: 5000
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: db-secret
+              key: DATABASE_URL

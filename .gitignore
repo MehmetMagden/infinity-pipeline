@@ -21,6 +21,7 @@ override.tf.json
 # --- KUBERNETES ---
 kubeconfig
 admin.conf
+swisstask-secret.yaml
 
 # --- İŞLETİM SİSTEMİ ---
 .DS_Store
