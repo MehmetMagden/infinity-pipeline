@@ -1,0 +1,24 @@
+---
+- name: Deploy SwissTask API to Kubernetes
+  hosts: master
+  tasks:
+    - name: Create a k8s manifest dir
+      file:
+        path: /home/vagrant/swisstask_k8s
+        state: directory
+        owner: vagrant
+        group: vagrant
+
+    - name: Copy deploy and service files to Master
+      copy:
+        src: "{{ item }}"
+        dest: /home/vagrant/swisstask_k8s/
+        owner: vagrant
+        group: vagrant
+      loop:
+      - ../../swisstask/k8s/swisstask-deployment.yaml
+      - ../../swisstask/k8s/swisstask-service.yaml
+
+    - name: Apply K8s objects
+      become_user: vagrant
+      command: kubectl apply -f /home/vagrant/swisstask_k8s/
