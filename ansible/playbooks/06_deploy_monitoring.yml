@@ -1,0 +1,33 @@
+---
+- name: Install Prometheus and Grafana Radar System ( with Helm )
+  hosts: master
+  tasks:
+    - name: Check if Helm is already installed
+      command: helm version
+      register: helm_check
+      ignore_errors: yes
+
+    - name: Download Helm install Script and run it ( if absent )
+      shell: |
+        curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+        chmod 700 get_helm.sh
+        ./get_helm.sh
+      when: helm_check.failed
+      become: yes
+
+    - name: Add Prometheus Helm
+      become_user: vagrant
+      command: helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+
+    - name: Update Helm
+      become_user: vagrant
+      command: helm repo update
+
+    - name: Create Monitoring Namespace
+      become_user: vagrant
+      command: kubectl create namespace monitoring
+      ignore_errors: yes
+
+    - name: Install Kube-Prometheus-Stack ( with Grafana )
+      become_user: vagrant
+      command: helm install radar prometheus-community/kube-prometheus-stack --namespace monitoring
