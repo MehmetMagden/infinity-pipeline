@@ -19,6 +19,7 @@ COPY --from=builder /app/requirements.txt .
 RUN pip install --no-cache /wheels/*
 
 COPY app.py .
+COPY templates/ ./templates/
 
 RUN useradd -m swisstaskuser
 USER swisstaskuser
