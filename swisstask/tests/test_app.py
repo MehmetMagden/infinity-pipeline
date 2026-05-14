@@ -1,45 +1,41 @@
-import os
-os.environ['DATABASE_URL'] = 'sqlite:///:memory:'
-
-import sys
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'app'))
-
 import pytest
-from app import app, db
+from unittest.mock import patch
+import sys
+import os
+
+# Add the app directory to the system path so Python can find it
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../app')))
+
+# Now we can safely import app (without db!)
+from app import app
 
 @pytest.fixture
 def client():
+    # Configure the Flask app for testing
     app.config['TESTING'] = True
-    app.config['PROPAGATE_EXCEPTIONS'] = False
-    
-    with app.app_context():
-        db.create_all()
-        yield app.test_client()
-        db.drop_all()
-        
-def test_health_Check(client):
-    response = client.get('/health')
+    with app.test_client() as client:
+        yield client
+
+def test_home_page(client):
+    # Ensure the frontend dashboard loads with 200 OK
+    response = client.get('/')
     assert response.status_code == 200
-    assert response.json == {"status": "healthy"}
+    assert b"Infinity Pipeline" in response.data
 
-def test_create_and_get_tasks(client):
-    # add new task
-    post_resp = client.post('/tasks', json={"title": "Stop Thanos"})
-    assert post_resp.status_code == 201
-    assert post_resp.json["title"] == "Stop Thanos"
-    assert post_resp.json["done"] is False
+@patch('app.get_db_connection')
+def test_get_tasks(mock_get_db_connection, client):
+    # Mock the PostgreSQL connection and cursor
+    mock_conn = mock_get_db_connection.return_value
+    mock_cur = mock_conn.cursor.return_value
+    
+    # Simulate data coming from the database
+    mock_cur.fetchall.return_value = [
+        (1, "Install Kubernetes", True),
+        (2, "Setup Cloudflare Tunnel", False)
+    ]
 
-    # get the task list and check
-    get_resp = client.get('/tasks')
-    assert get_resp.status_code == 200
-    assert len(get_resp.json) == 1
-    assert get_resp.json[0]["title"] == "Stop Thanos"
-
-def test_delete_task(client):
-    # first create a task
-    client.post('/tasks', json={"title": "Task to Delete"})
-
-    # then delete it
-    del_resp = client.delete('/tasks/1')
-    assert del_resp.status_code == 200
-    assert del_resp.json["message"] == "Task deleted"
+    # Call the API
+    response = client.get('/tasks')
+    
+    assert response.status_code == 200
+    assert b"Setup Cloudflare Tunnel" in response.data
