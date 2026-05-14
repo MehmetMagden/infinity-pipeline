@@ -17,6 +17,7 @@ spec:
       containers:
       - name: swisstask
         image: wowmaker/swisstask:latest
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 5000
         env:
