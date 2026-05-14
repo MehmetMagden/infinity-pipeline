@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinity Pipeline | Cloud-Native Engineering Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background-color: #0b1120; color: #f1f5f9; scroll-behavior: smooth; }
+        .glass { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
+        .accent-gradient { background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-bg { background: radial-gradient(circle at 50% 0%, #1e293b 0%, #0b1120 70%); }
+    </style>
+</head>
+<body class="font-sans antialiased">
+
+    <nav class="fixed w-full z-50 glass border-b border-white/5">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold tracking-tighter">INFINITY <span class="text-blue-500">PIPELINE</span></div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+                <a href="#about" class="hover:text-blue-400 transition">About</a>
+                <a href="#tech" class="hover:text-blue-400 transition">Stack</a>
+                <a href="#workflow" class="hover:text-blue-400 transition">Workflow</a>
+                <a href="#battlelog" class="hover:text-blue-400 transition">Battle Log</a>
+            </div>
+            <a href="https://radar.aimaden.com" target="_blank" class="bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-lg text-sm font-bold transition">Live Ops</a>
+        </div>
+    </nav>
+
+    <header class="pt-40 pb-24 hero-bg text-center relative">
+        <div class="container mx-auto px-6">
+            <div class="inline-block px-4 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-bold mb-6 uppercase tracking-widest">
+                Mission Status: Fully Operational
+            </div>
+            <h1 class="text-6xl md:text-8xl font-black mb-8 leading-none">
+                Orchestrating <br><span class="accent-gradient">Modern Infrastructure</span>
+            </h1>
+            <p class="text-xl text-slate-400 max-w-3xl mx-auto mb-10 leading-relaxed">
+                A production-grade Kubernetes ecosystem built from bare-metal virtual nodes, automated by Ansible, and secured via Zero Trust tunnels. 
+            </p>
+            <div class="flex flex-wrap justify-center gap-6">
+                <a href="/tasks" class="px-10 py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-blue-50 transition shadow-lg shadow-blue-500/20">
+                    Explore API
+                </a>
+                <a href="https://github.com" target="_blank" class="px-10 py-4 glass rounded-xl font-bold hover:bg-slate-800 transition">
+                    View Source
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <section id="tech" class="py-24 bg-slate-900/50">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="text-sm font-bold text-blue-500 uppercase tracking-[0.3em] mb-4">Tactical Gear</h2>
+            <h3 class="text-4xl font-bold mb-16">Technology Stack</h3>
+            <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-8">
+                <div class="p-6 glass rounded-2xl hover:border-blue-500/50 transition">
+                    <i class="fab fa-linux text-4xl mb-4 text-slate-300"></i>
+                    <p class="font-bold">Ubuntu</p>
+                </div>
+                <div class="p-6 glass rounded-2xl hover:border-blue-500/50 transition">
+                    <i class="fas fa-cubes text-4xl mb-4 text-blue-500"></i>
+                    <p class="font-bold">K8s</p>
+                </div>
+                <div class="p-6 glass rounded-2xl hover:border-blue-500/50 transition">
+                    <i class="fas fa-cog text-4xl mb-4 text-red-500"></i>
+                    <p class="font-bold">Ansible</p>
+                </div>
+                <div class="p-6 glass rounded-2xl hover:border-blue-500/50 transition">
+                    <i class="fab fa-docker text-4xl mb-4 text-sky-400"></i>
+                    <p class="font-bold">Docker</p>
+                </div>
+                <div class="p-6 glass rounded-2xl hover:border-blue-500/50 transition">
+                    <i class="fas fa-database text-4xl mb-4 text-blue-300"></i>
+                    <p class="font-bold">PostgreSQL</p>
+                </div>
+                <div class="p-6 glass rounded-2xl hover:border-blue-500/50 transition">
+                    <i class="fab fa-github text-4xl mb-4 text-white"></i>
+                    <p class="font-bold">CI/CD</p>
+                </div>
+                <div class="p-6 glass rounded-2xl hover:border-blue-500/50 transition">
+                    <i class="fas fa-cloud text-4xl mb-4 text-orange-400"></i>
+                    <p class="font-bold">Cloudflare</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="workflow" class="py-24">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-20 text-center">Development Lifecycle</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="space-y-12">
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center font-bold">1</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">Bare-Metal Foundation</h4>
+                            <p class="text-slate-400">Infrastructure as Code (IaC) using <b>Vagrant & VirtualBox</b>. We architected a 4-node cluster (1 Master, 2 Workers, 1 Workstation) on a private 192.168.56.x subnet.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center font-bold">2</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">Automated Provisioning</h4>
+                            <p class="text-slate-400">Deployed <b>Ansible Playbooks</b> to automate OS hardening, SSH key distribution, and the complex 27-step Kubernetes initialization process.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center font-bold">3</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">Microservices Architecture</h4>
+                            <p class="text-slate-400">Built a <b>Python Flask API</b> integrated with <b>PostgreSQL</b>. Managed state with PersistentVolumes and sensitive data via K8s Secrets.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-12">
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center font-bold">4</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">Continuous Integration (CI/CD)</h4>
+                            <p class="text-slate-400">Every commit triggers a <b>GitHub Action</b>. It builds the Docker image, pushes to DockerHub, and updates the K8s cluster with zero-downtime rolling updates.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center font-bold">5</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">Zero Trust Global Access</h4>
+                            <p class="text-slate-400">Using <b>Cloudflare Tunnels</b>, we bypassed traditional port-forwarding to expose local services securely via <i>api.aimaden.com</i> and <i>radar.aimaden.com</i>.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-6">
+                        <div class="flex-shrink-0 w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center font-bold">6</div>
+                        <div>
+                            <h4 class="text-xl font-bold mb-2">Observability & Radar</h4>
+                            <p class="text-slate-400">Full stack monitoring with <b>Prometheus & Grafana</b>. We track CPU/RAM/Network metrics in real-time to ensure 99.9% system reliability.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="battlelog" class="py-24 bg-blue-900/10">
+        <div class="container mx-auto px-6">
+            <h2 class="text-3xl font-bold mb-16 text-center">The Battle Logs: Surviving the Chaos</h2>
+            <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="glass p-8 rounded-3xl border-l-4 border-red-500">
+                    <h4 class="text-xl font-bold mb-4 italic text-red-400">"The Windows Update Disaster"</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        <b>Problem:</b> A forced host OS update killed all 4 virtual nodes, causing a network desync and zombie pods (Unknown status).<br>
+                        <b>Solution:</b> Performed a surgical 'Vagrant Reload' to re-initialize host-only interfaces and leveraged K8s Self-Healing to respawn broken services.
+                    </p>
+                </div>
+                <div class="glass p-8 rounded-3xl border-l-4 border-orange-500">
+                    <h4 class="text-xl font-bold mb-4 italic text-orange-400">"The Swap Memory Embargo"</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        <b>Problem:</b> Kubelet failed to start on Worker nodes because Linux Swap was active, breaking deterministic scheduling.<br>
+                        <b>Solution:</b> Disabled Swap permanently via fstab and Ansible automation, ensuring 100% stability for the Kubernetes engine.
+                    </p>
+                </div>
+                <div class="glass p-8 rounded-3xl border-l-4 border-blue-500">
+                    <h4 class="text-xl font-bold mb-4 italic text-blue-400">"YAML Decoding Crisis"</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        <b>Problem:</b> Strict decoding errors in K8s manifests due to incorrect secretKeyRef mapping for the Database URL.<br>
+                        <b>Solution:</b> Refactored the manifest hierarchy and injected DB credentials through Kubernetes Secrets for maximum security.
+                    </p>
+                </div>
+                <div class="glass p-8 rounded-3xl border-l-4 border-green-500">
+                    <h4 class="text-xl font-bold mb-4 italic text-green-400">"The Secure Tunnel Breakthrough"</h4>
+                    <p class="text-slate-400 text-sm leading-relaxed">
+                        <b>Problem:</b> Exposing a local virtual lab to the public internet without opening dangerous router ports.<br>
+                        <b>Solution:</b> Implemented Cloudflare Zero Trust Tunnels within the cluster, providing encrypted outbound-only global connectivity.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="py-20 border-t border-white/5 text-center">
+        <div class="text-slate-500 text-sm">
+            <p>Designed and Orchestrated as a S.H.I.E.L.D. Technical Operation</p>
+            <p class="mt-2">Core Architect: Mehmet | Year: 2026</p>
+        </div>
+    </footer>
+
+</body>
+</html>
