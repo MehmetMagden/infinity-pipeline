@@ -51,6 +51,9 @@ def get_tasks():
         # Never expose raw SQL errors to the client
         return jsonify({"error": "Internal server error"}), 500
     
+with app.app_context():
+    db.create_all()
+    
 if __name__ == '__main__':
     # Running on 0.0.0.0 to be accessible within the K8s network
     app.run(host='0.0.0.0', port=5000)
