@@ -14,7 +14,7 @@ db_url = os.getenv("DATABASE_URL", "sqlite:///:memory:")
 if db_url and db_url.startswith("postgres://"):
     db_url = db_url.replace("postgres://", "postgresql://", 1)
 
-app.config['SQLALCHEMY_DATABASE_URL'] = db_url
+app.config['SQLALCHEMY_DATABASE_URI'] = db_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the orm
@@ -31,7 +31,7 @@ class Task(db.Model):
         return {
             "id": self.id,
             "title": self.title,
-            "mopleted": self.completed
+            "completed": self.completed
         }
         
 
@@ -40,7 +40,7 @@ def home():
     # This route serves our professional project portfolio
     return render_template('index.html')  
 
-@app.route('/tasks', methods['GET'])  
+@app.route('/tasks', methods=['GET'])  
 def get_tasks():
     # Dedicated API endpoint, now fully secured against SL Injections
     try:
