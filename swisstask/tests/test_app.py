@@ -1,41 +1,47 @@
 import pytest
-from unittest.mock import patch
-import sys
-import os
-
-# Add the app directory to the system path so Python can find it
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../app')))
-
-# Now we can safely import app (without db!)
-from app import app
+from app.app import app, db, Task
 
 @pytest.fixture
 def client():
-    # Configure the Flask app for testing
+    # Configure the app for testing
     app.config['TESTING'] = True
-    with app.test_client() as client:
-        yield client
+    # Use a volatile, in-memory database specifically for tests
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
 
-def test_home_page(client):
-    # Ensure the frontend dashboard loads with 200 OK
+    with app.test_client() as client:
+        with app.app_context():
+            # Create the mock tables based on our SQLAlchemy models
+            db.create_all()
+            yield client
+            # Clean up after the tests are done
+            db.session.remove()
+            db.drop_all()
+            
+def test_home(client):
+    """Test if portfolio home page loads correctly"""
     response = client.get('/')
     assert response.status_code == 200
-    assert b"Infinity Pipeline" in response.data
-
-@patch('app.get_db_connection')
-def test_get_tasks(mock_get_db_connection, client):
-    # Mock the PostgreSQL connection and cursor
-    mock_conn = mock_get_db_connection.return_value
-    mock_cur = mock_conn.cursor.return_value
     
-    # Simulate data coming from the database
-    mock_cur.fetchall.return_value = [
-        (1, "Install Kubernetes", True),
-        (2, "Setup Cloudflare Tunnel", False)
-    ]
-
-    # Call the API
+    
+def test_Get_tasks(client):    
+    """Test if the API retrieves tasks correctly using the ORM"""
+    # Inject mock data into our test database using the ORM
+    with app.app_context():
+        task1 = Task(title="Deploy K8s Cluster", completed=True)
+        task2 = Task(title="Fix Pytest Suite", completed=False)
+        db.session.add(task1)
+        db.session.add(task2)
+        db.session.commit()
+        
+    # Call the ApI endpoint
     response = client.get('/tasks')
-    
+
+    # Verify the response
     assert response.status_code == 200
-    assert b"Setup Cloudflare Tunnel" in response.data
+    data = response.get_json()
+    
+    assert len(data) == 2
+    assert data [0]['title'] == "Deploy K8s Cluster" 
+    assert data[0]['completed'] is True
+    assert data[1]['title'] == "Fix Pytest Suite"
+    assert data[1]['completed'] is False
