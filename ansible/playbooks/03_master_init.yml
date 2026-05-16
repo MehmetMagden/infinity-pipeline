@@ -30,6 +30,20 @@
         group: vagrant
         mode: '0644'
 
-    - name: Create Pd Net ( Flannel CNI)
+
+    - name: Download Flanner Network Manifest
+      get_url:
+        url: https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+        dest: /tmp/kube-flannel.yml
+
+    - name: Patch Flannel for Vagrant Dual-NIC (Inject --iface=enp0s8)
+      replace:
+        path: /tmp/kube-flannel.yml
+        regexp: '(--kube-subnet-mgr)'
+        replace: '\1\n        - --iface=enp0s8'
+
+    - name: Create Pd Net ( Flannel CNI ) with Dual-NIC Fix
       become_user: vagrant
-      command: kubectl apply -f https://github.com/flannel-io/flannel/releases/latest/download/kube-flannel.yml
+      command: kubectl apply -f /tmp/kube-flannel.yml
+
+

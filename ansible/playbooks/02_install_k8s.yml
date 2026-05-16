@@ -48,4 +48,18 @@
         - kubelet
         - kubeadm
         - kubectl
-      
+
+    - name: Configure Kueblet to use the Host-Only IP ( Dual-NIC Fix )  
+      lineinfile:
+        path: /etc/default/kubelet
+        line: 'KUBELET_EXTRA_ARGS=--node-ip={{ ansible_enp0s8.ipv4.address }}'
+        create: yes
+      notify: Restart Kubelet
+
+  handlers:
+    - name: Restart Kubelet
+      systemd:
+        name: kubelet
+        state: restarted
+        daemon_reload: yes
+  
